@@ -218,4 +218,13 @@ class BarToBarBallView(ctx : Context) : View(ctx) {
             }
         }
     }
+
+    companion object {
+
+        fun create(activity : Activity) : BarToBarBallView {
+            val view : BarToBarBallView = BarToBarBallView(activity)
+            activity.setContentView(view)
+            return view
+        }
+    }
 }
