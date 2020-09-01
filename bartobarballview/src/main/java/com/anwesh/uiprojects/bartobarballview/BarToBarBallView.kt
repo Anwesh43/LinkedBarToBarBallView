@@ -26,8 +26,45 @@ val delay : Long = 20
 val sizeFactor : Float = 2.9f
 val hFactor : Float = 5.2f
 val backColor : Int = Color.parseColor("#BDBDBD")
+val strokeFactor : Float = 90f
 
 fun Int.inverse() : Float = 1f / this
 fun Float.maxScale(i : Int, n : Int) : Float = Math.max(0f, this - i * n.inverse())
 fun Float.divideScale(i : Int, n : Int) : Float = Math.min(n.inverse(), maxScale(i, n)) * n
 fun Float.sinify() : Float = Math.sin(this * Math.PI).toFloat()
+
+fun Canvas.drawBarToBarBall(scale : Float, w : Float, h : Float, paint : Paint) {
+    val gap : Float = (w) / (circles + 2)
+    val size : Float = gap / sizeFactor
+    val hSize : Float = h / hFactor
+    val sf : Float = scale.sinify()
+    var x : Float = 0f
+    var r : Float = 0f
+    save()
+    translate(0f, h)
+    for (j in 0..circles) {
+        val sfj : Float = sf.divideScale(j, circles)
+        val sf1 : Float = sfj.divideScale(0, 2)
+        val sf2 : Float = sfj.divideScale(1, 2)
+        if (j == 0) {
+            r = size * 0.5f * sf2
+        } else {
+            x += (gap * sf2)
+        }
+        save()
+        translate(gap / 2 + gap * j, 0f)
+        drawRect(RectF(-size / 2, -hSize * sf1, size / 2, 0f), paint)
+        restore()
+    }
+    drawCircle(x, -hSize - size / 2, r, paint)
+    restore()
+}
+
+fun Canvas.drawBTBBNode(i : Int, scale : Float, paint : Paint) {
+    val w : Float = width.toFloat()
+    val h : Float = height.toFloat()
+    paint.color = colors[i]
+    paint.strokeCap = Paint.Cap.ROUND
+    paint.strokeWidth = Math.min(w, h) / strokeFactor
+    drawBarToBarBall(scale, w, h, paint)
+}
