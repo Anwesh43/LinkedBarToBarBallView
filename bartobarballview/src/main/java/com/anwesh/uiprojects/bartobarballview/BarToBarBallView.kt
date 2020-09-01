@@ -20,9 +20,9 @@ val colors : Array<Int> = arrayOf(
         "#3F51B5",
         "#673AB7"
 ).map({Color.parseColor(it)}).toTypedArray()
-val circles : Int = 3
+val circles : Int = 5
 val scGap : Float = 0.02f / (circles * 2)
-val delay : Long = 20
+val delay : Long = 10
 val sizeFactor : Float = 2.9f
 val hFactor : Float = 5.2f
 val backColor : Int = Color.parseColor("#BDBDBD")
@@ -34,15 +34,15 @@ fun Float.divideScale(i : Int, n : Int) : Float = Math.min(n.inverse(), maxScale
 fun Float.sinify() : Float = Math.sin(this * Math.PI).toFloat()
 
 fun Canvas.drawBarToBarBall(scale : Float, w : Float, h : Float, paint : Paint) {
-    val gap : Float = (w) / (circles + 2)
+    val gap : Float = (w) / (circles)
     val size : Float = gap / sizeFactor
     val hSize : Float = h / hFactor
     val sf : Float = scale.sinify()
-    var x : Float = 0f
+    var x : Float = gap / 2
     var r : Float = 0f
     save()
     translate(0f, h)
-    for (j in 0..circles) {
+    for (j in 0..(circles - 1)) {
         val sfj : Float = sf.divideScale(j, circles)
         val sf1 : Float = sfj.divideScale(0, 2)
         val sf2 : Float = sfj.divideScale(1, 2)
