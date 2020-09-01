@@ -32,18 +32,22 @@ fun Int.inverse() : Float = 1f / this
 fun Float.maxScale(i : Int, n : Int) : Float = Math.max(0f, this - i * n.inverse())
 fun Float.divideScale(i : Int, n : Int) : Float = Math.min(n.inverse(), maxScale(i, n)) * n
 fun Float.sinify() : Float = Math.sin(this * Math.PI).toFloat()
+fun Float.negateFromOne() : Float = 1f - this
+fun Float.floorPointFive() : Float = Math.floor(0.5 + this).toFloat()
+fun Float.negateAdd(a : Float, b : Float) : Float = a * this.negateFromOne() + b * this
+fun Float.linearBounce() : Float = floorPointFive().negateAdd(this * 2, negateFromOne() * 2)
 
 fun Canvas.drawBarToBarBall(scale : Float, w : Float, h : Float, paint : Paint) {
     val gap : Float = (w) / (circles)
     val size : Float = gap / sizeFactor
     val hSize : Float = h / hFactor
-    val sf : Float = scale.sinify()
+    val sf : Float = scale.linearBounce()
     var x : Float = gap / 2
     var r : Float = 0f
     save()
     translate(0f, h)
     for (j in 0..(circles - 1)) {
-        val sfj : Float = sf.divideScale(j, circles)
+        val sfj : Float = sf.divideScale(j, circles + 1)
         val sf1 : Float = sfj.divideScale(0, 2)
         val sf2 : Float = sfj.divideScale(1, 2)
         if (j == 0) {
