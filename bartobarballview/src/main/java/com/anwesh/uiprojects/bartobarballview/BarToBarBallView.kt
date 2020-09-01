@@ -195,4 +195,27 @@ class BarToBarBallView(ctx : Context) : View(ctx) {
             curr.startUpdating(cb)
         }
     }
+
+    data class Renderer(var view : BarToBarBallView) {
+
+        private val animator : Animator = Animator(view)
+        private val btbb : BarToBarBall = BarToBarBall(0)
+        private val paint : Paint = Paint(Paint.ANTI_ALIAS_FLAG)
+
+        fun render(canvas : Canvas) {
+            canvas.drawColor(backColor)
+            btbb.draw(canvas, paint)
+            animator.animate {
+                btbb.update {
+                    animator.stop()
+                }
+            }
+        }
+
+        fun handleTap() {
+            btbb.startUpdating {
+                animator.start()
+            }
+        }
+    }
 }
